@@ -83,15 +83,43 @@ public class CalculatorControllerTests {
 		assertEquals(expectedResult, response.getContentAsString());
 
 	}
-	
+
 	@Test
 	public void divideZeroOperatorTest() throws Exception{
+		String jsonBody = "{\"operand1\": 10, \"operand2\": 0}";
 
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(Constants.CALCULATOR_PATH + "/divide")
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(jsonBody);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+
+		String expectedResult = "{\"message\":\"Error: Can't divide by zero\",\"error\":true,\"result\":null}";
+
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+		assertEquals(expectedResult, response.getContentAsString());
 	}
 	
 	@Test
 	public void negativeDivisionOperatorTest() throws Exception{
+		String jsonBody = "{\"operand1\": -10, \"operand2\": 2}";
 
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(Constants.CALCULATOR_PATH + "/divide")
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(jsonBody);
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+
+		String expectedResult = "{\"message\":\"\",\"error\":false,\"result\":-5}";
+
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+		assertEquals(expectedResult, response.getContentAsString());
 	}
 
 }
